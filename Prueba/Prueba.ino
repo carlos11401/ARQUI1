@@ -27,10 +27,11 @@ void setup() {
   }
 }
 
-char text[] = "jkl";
+char text[] = "prueba";
 int textDelay = 10;
 String dynamicText;
 int counter = 0;
+int contador=0;
 void loop() {
   
   // -------------------- READ TEXT -----------------------------
@@ -41,19 +42,21 @@ void loop() {
       dynamicText = "";
     }
     if(val == 13){
+      Serial1.print(dynamicText);
       memset(text,"",sizeof(text));
       for(int i=0; i<dynamicText.length(); i++){
         text[i] = dynamicText[i];
       }
       dynamicText = "";
       counter = 0;
+      
     }else{
       dynamicText = dynamicText + val;
-      Serial1.print(dynamicText);
+      //Serial1.print(dynamicText);
     }    
   }else if(digitalRead(MODTEXT) == 0){
     //memset(text,"",sizeof(text));
-    dynamicText = "jkl";
+    dynamicText = "prueba";
     for(int i=0; i<dynamicText.length(); i++){
         text[i] = dynamicText[i];
       }
@@ -62,8 +65,14 @@ void loop() {
   verifyRate();
   // -------------------- MODE 1 -----------------------------
   if(digitalRead(MOD1) == 1){
-    screen.escribirCaracter('a',0);
-    delay(500);
+     // Escribir texto estatico
+    screen.borrar();
+    if(contador==sizeof(text)-1){
+      contador=0;
+    }
+    screen.escribirCaracter(text[contador] , 0); // Caracter, posicion en la pantalla
+    contador++;
+    delay(textDelay);
   }
   // -------------------- MODE 2 -----------------------------
   if(digitalRead(MOD2) == 1 and MOD1 != 1){
